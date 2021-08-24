@@ -7,6 +7,7 @@ from aiogram.utils import executor
 import keyboards as kb
 import config
 from database import Users
+import time
 
 DELAY = 180
 
@@ -27,65 +28,116 @@ async def help(message: types.Message):
 
 
 @dp.message_handler(commands=['restart'])
-async def process_hi5_command(message: types.Message):
+async def restart(message: types.Message):
     await message.reply("Что будем перезагружать?", reply_markup=kb.markup)
 
 
 @dp.message_handler(commands=['re_Workdirect'])
-async def restart_cleex_back(message: types.Message):
-    await message.answer('перезагружаю Workdirect...\nПодожди 5 минут и вызови /status')
-
-
-@dp.message_handler(commands=['re_Cleex_back'])
-async def restart_cleex_back(message: types.Message):
-    await message.answer('перезагружаю Cleex back...\nПодожди 5 минут и вызови /status')
-
-
-@dp.message_handler(commands=['re_Cleex_image'])
-async def restart_cleex_back(message: types.Message):
-    cmd_list = ['cd .', 'ls', 'cd /var/www/cleex_image/', 'ls', 'sudo kill -9 $(sudo lsof -t -i:7050)', '']
+async def restart_workdirect(message: types.Message):
     ssh = paramiko.SSHClient()
     ssh.set_missing_host_key_policy(paramiko.AutoAddPolicy())
     try:
         ssh.connect('192.168.8.111', username='vitaly', password='2262')
-        print('connected')
-        for command in cmd_list:
-            await message.answer("> " + command)
-            stdin, stdout, stderr = ssh.exec_command('ls -l')
+        await message.answer('Минуту терпения \U0000231B\U000023F3')
+        try:
+            stdin, stdout, stderr = ssh.exec_command('rm -r -f /var/www/workdirect.ru/\ncd /var/www/\ngit clone https://github.com/INDEX-GG/WorkDirect.git\ncd WorkDirect/\nmv project-root/ /var/www/\nrm -r -f /var/www/WorkDirect/\ncd /var/www/\nmv project-root/ workdirect.ru\ncd /var/www/\nchmod -R 777 workdirect.ru\ncd /var/www/workdirect.ru/\ncomposer update\ny')
             opt = stdout.readlines()
             opt = "".join(opt)
+            opt2 = stderr.readlines()
+            opt2 = "".join(opt2)
             print(opt)
-        await message.answer('Готово, вызови /status')
+            print(opt2)
+            await message.answer('Готово\U0001F60E вызови /status')
+        except Exception:
+            await message.answer(
+                'При выполнении команд по SSH что-то пошло не так \U0001F631\nНо срвер мог перезапуститься, проверь /status')
+    except Exception:
+        await message.answer('Не удалось подключиться к SSH \U0001F631')
+
+
+@dp.message_handler(commands=['re_Cleex_back'])
+async def restart_cleex_back(message: types.Message):
+    ssh = paramiko.SSHClient()
+    ssh.set_missing_host_key_policy(paramiko.AutoAddPolicy())
+    try:
+        ssh.connect('192.168.8.111', username='vitaly', password='2262')
+        await message.answer('Минуту терпения \U0000231B\U000023F3')
+        try:
+            stdin, stdout, stderr = ssh.exec_command('cd /var/www/cleex.ru/backend/\ndocker rm -f cleex-back\ndocker rmi docker.pkg.github.com/index-gg/cleex_backend/cleex-back:develop\necho 2262 | sudo -S docker-compose up -d')
+            opt = stdout.readlines()
+            opt = "".join(opt)
+            await message.answer('Готово\U0001F37E вызови /status')
+        except Exception:
+            await message.answer(
+                'При выполнении команд по SSH что-то пошло не так \U0001F631\nНо срвер мог перезапуститься, проверь /status')
     except Exception:
         await message.answer('Не удалось подключиться к SSH \U0001F631')
 
 
 @dp.message_handler(commands=['re_Kvik_next'])
-async def restart_cleex_back(message: types.Message):
-    await message.answer('перезагружаю Kvik next...\nПодожди 5-10 минут и вызови /status')
-
-
-@dp.message_handler(commands=['re_Kvik_image'])
-async def restart_cleex_back(message: types.Message):
-    cmd_list = ['cd /var/www/kvik_image/', 'sudo kill -9 $(sudo lsof -t -i:6001)', 'uwsgi --socket 192.168.8.111:6001 --processes 4 --threads 2 --stats 192.168.8.111:7001 --protocol=http -w wsgi:app']
+async def restart_kvik_next(message: types.Message):
     ssh = paramiko.SSHClient()
     ssh.set_missing_host_key_policy(paramiko.AutoAddPolicy())
     try:
         ssh.connect('192.168.8.111', username='vitaly', password='2262')
-        print('connected')
-        for command in cmd_list:
-            await message.answer("> " + command)
-            stdin, stdout, stderr = ssh.exec_command(command)
+        await message.answer('Это минут на 10-15, тебе придет уведомление как я закончу \U0000231B\U000023F3')
+        try:
+            stdin, stdout, stderr = ssh.exec_command('cd /var/www/kvik.ru/\nrm -r -f kvik_destkop\ngit clone https://github.com/INDEX-GG/kvik_destkop.git\ncd kvik_destkop/\ndocker rm -f kvik_production\ndocker rmi kvik_production\ndocker build -t kvik_production .\ndocker-compose up -d\n')
             opt = stdout.readlines()
             opt = "".join(opt)
+            opt2 = stderr.readlines()
+            opt2 = "".join(opt2)
             print(opt)
-        await message.answer('Готово, вызови /status')
+            print('---')
+            print(opt2)
+
+
+            await message.answer('Готово\U0001F917 вызови /status')
+        except Exception:
+            await message.answer(
+                'При выполнении команд по SSH что-то пошло не так \U0001F631\nНо срвер мог перезапуститься, проверь /status')
+    except Exception:
+        await message.answer('Не удалось подключиться к SSH \U0001F631')
+
+
+@dp.message_handler(commands=['re_Cleex_image'])
+async def restart_cleex_image(message: types.Message):
+    ssh = paramiko.SSHClient()
+    ssh.set_missing_host_key_policy(paramiko.AutoAddPolicy())
+    try:
+        ssh.connect('192.168.8.111', username='vitaly', password='2262')
+        await message.answer('1...2...3... \U0001F406')
+        try:
+            stdin, stdout, stderr = ssh.exec_command('cd /var/www/cleex_image/\nkill -9 $(lsof -t -i:7050)\nkill -9 $(lsof -t -i:7051)\nuwsgi -M --socket 192.168.8.111:7050 --processes 4 --threads 2 --stats 192.168.8.111:7051 --protocol=http -w wsgi:app --daemonize /tmp/mylog.log')
+            opt = stdout.readlines()
+            opt = "".join(opt)
+            await message.answer('Готово\U0001F44D вызови /status')
+        except Exception:
+            await message.answer('При выполнении команд по SSH что-то пошло не так \U0001F631\nНо срвер мог перезапуститься, проверь /status')
+    except Exception:
+        await message.answer('Не удалось подключиться к SSH \U0001F631')
+
+
+@dp.message_handler(commands=['re_Kvik_image'])
+async def restart_kvik_image(message: types.Message):
+    ssh = paramiko.SSHClient()
+    ssh.set_missing_host_key_policy(paramiko.AutoAddPolicy())
+    await message.answer('1...2...3... \U0001F406')
+    try:
+        ssh.connect('192.168.8.111', username='vitaly', password='2262')
+        try:
+            stdin, stdout, stderr = ssh.exec_command('cd /var/www/kvik_image/\nkill -9 $(lsof -t -i:6001)\nkill -9 $(lsof -t -i:7001)\nuwsgi -M --socket 192.168.8.111:6001 --processes 4 --threads 2 --stats 192.168.8.111:7001 --protocol=http -w wsgi:app --daemonize /tmp/mylog.log')
+            opt = stdout.readlines()
+            opt = "".join(opt)
+            await message.answer('Готово\U0001F973 вызови /status')
+        except Exception:
+            await message.answer('При выполнении команд по SSH что-то пошло не так \U0001F631\nНо срвер мог перезапуститься, проверь /status')
     except Exception:
         await message.answer('Не удалось подключиться к SSH \U0001F631')
 
 
 @dp.message_handler(commands=['status'])
-async def start(message: types.Message):
+async def status(message: types.Message):
     if Users.get_or_none(number=message.from_user.id) is None:
         Users.create(number=message.from_user.id)
     try:
@@ -136,13 +188,70 @@ async def start(message: types.Message):
     await message.answer('\U000026AA Workdirect' + ' ' * len1 + status1 + '\n\U000026AA Cleex (back)' + ' ' * len2 + status2 + '\n\U000026AA Cleex (image)' + ' ' * len3 + status3 + '\n\U000026AA Kvik (next)' + ' ' * len4 + status4 + '\n\U000026AA Kvik (image)' + ' ' * len5 + status5)
 
 
-# async def listen():
-#     users_selected = (Users.select()).dicts().execute()
-#     for user in users_selected:
-#         message = '123456'
-#         send_text = 'https://api.telegram.org/bot' + config.TOKEN + '/sendMessage?chat_id=' + str(user['number']) + '&text=' + message
-#         response = requests.get(send_text)
-#         print(response.json())
+async def listen():
+    stack = []
+    try:
+        response1 = requests.get("http://192.168.8.111:3070")
+        if response1.status_code != 200:
+            status1 = 'false'
+        else:
+            status1 = 'true'
+    except Exception:
+        status1 = 'false'
+    stack.append(status1)
+    try:
+        response2 = requests.get("http://192.168.8.111:6011")
+        if response2.status_code != 200:
+            status2 = 'false'
+        else:
+            status2 = 'true'
+    except Exception:
+        status2 = 'false'
+    stack.append(status2)
+    try:
+        response3 = requests.get("http://192.168.8.111:7050")
+        if response3.status_code != 200:
+            status3 = 'false'
+        else:
+            status3 = 'true'
+    except Exception:
+        status3 = 'false'
+    stack.append(status3)
+    try:
+        response4 = requests.get("http://192.168.8.111:3000")
+        if response4.status_code != 200:
+            status4 = 'false'
+        else:
+            status4 = 'true'
+    except Exception:
+        status4 = 'false'
+    stack.append(status4)
+    try:
+        response5 = requests.get("http://192.168.8.111:6001")
+        if response5.status_code != 200:
+            status5 = 'false'
+        else:
+            status5 = 'true'
+    except Exception:
+        status5 = 'false'
+    stack.append(status5)
+
+
+
+
+    users_selected = (Users.select()).dicts().execute()
+    for user in users_selected:
+        message = '123456'
+        send_text = 'https://api.telegram.org/bot' + config.TOKEN + '/sendMessage?chat_id=' + str(user['number']) + '&text=' + message
+        response = requests.get(send_text)
+        time.sleep(1)
+
+
+
+
+
+
+
 
 def repeat(coro, loop):
     asyncio.ensure_future(coro(), loop=loop)
