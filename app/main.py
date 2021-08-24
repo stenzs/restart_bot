@@ -9,7 +9,7 @@ import config
 from database import Users
 import time
 
-DELAY = 180
+DELAY = 1800
 
 bot = Bot(token=config.TOKEN)
 dp = Dispatcher(bot)
@@ -80,7 +80,7 @@ async def restart_kvik_next(message: types.Message):
     ssh.set_missing_host_key_policy(paramiko.AutoAddPolicy())
     try:
         ssh.connect('192.168.8.111', username='vitaly', password='2262')
-        await message.answer('Это минут на 10-15, тебе придет уведомление как я закончу \U0000231B\U000023F3')
+        await message.answer('Это минут на 10-15, тебе придет уведомление, как я закончу \U0000231B\U000023F3')
         try:
             stdin, stdout, stderr = ssh.exec_command('cd /var/www/kvik.ru/\nrm -r -f kvik_destkop\ngit clone https://github.com/INDEX-GG/kvik_destkop.git\ncd kvik_destkop/\ndocker rm -f kvik_production\ndocker rmi kvik_production\ndocker build -t kvik_production .\ndocker-compose up -d\n')
             opt = stdout.readlines()
@@ -185,7 +185,7 @@ async def status(message: types.Message):
     len3 = 8
     len4 = 14
     len5 = 11
-    await message.answer('\U000026AA Workdirect' + ' ' * len1 + status1 + '\n\U000026AA Cleex (back)' + ' ' * len2 + status2 + '\n\U000026AA Cleex (image)' + ' ' * len3 + status3 + '\n\U000026AA Kvik (next)' + ' ' * len4 + status4 + '\n\U000026AA Kvik (image)' + ' ' * len5 + status5)
+    await message.answer('\U000026AA Workdirect' + ' ' * len1 + status1 + '\n\U000026AA Cleex (back)' + ' ' * len2 + status2 + '\n\U000026AA Cleex (image)' + ' ' * len3 + status3 + '\n\U000026AA Kvik (next)' + ' ' * len4 + status4 + '\n\U000026AA Kvik (image)' + ' ' * len5 + status5 + '\n/restart для перезапуска')
 
 
 async def listen():
@@ -235,21 +235,13 @@ async def listen():
     except Exception:
         status5 = 'false'
     stack.append(status5)
-
-
-
-
-    users_selected = (Users.select()).dicts().execute()
-    for user in users_selected:
-        message = '123456'
-        send_text = 'https://api.telegram.org/bot' + config.TOKEN + '/sendMessage?chat_id=' + str(user['number']) + '&text=' + message
-        response = requests.get(send_text)
-        time.sleep(1)
-
-
-
-
-
+    if 'false' in stack:
+        users_selected = (Users.select()).dicts().execute()
+        for user in users_selected:
+            message = 'С одним из серверов что-то не так, проверь /status'
+            send_text = 'https://api.telegram.org/bot' + config.TOKEN + '/sendMessage?chat_id=' + str(user['number']) + '&text=' + message
+            response = requests.get(send_text)
+            time.sleep(1)
 
 
 
