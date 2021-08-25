@@ -1,4 +1,4 @@
 /venv/
 /.idea/
-/app/static/
+/static/
 /config.py

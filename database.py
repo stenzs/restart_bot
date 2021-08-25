@@ -16,5 +16,3 @@ class Users(BaseModel):
 
     class Meta:
         table_name = 'users'
-
-db.create_tables([Users])

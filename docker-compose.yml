@@ -1,8 +1,8 @@
 version: "3.9"
 services:
   app:
-    image: telegram_bot
-    container_name: telegram_bot
+    image: restart_app
+    container_name: restart_app
     restart: always
     ports:
       - 7777:5000
