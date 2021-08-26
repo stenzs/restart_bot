@@ -95,9 +95,9 @@ async def restart_kvik_next(message: types.Message):
     ssh.set_missing_host_key_policy(paramiko.AutoAddPolicy())
     try:
         ssh.connect('192.168.8.111', username='vitaly', password='2262')
-        await message.answer('Придется немного подождать \U0000231B\U000023F3')
+        await message.answer('Придется немного подождать, тебе придет уведомление, как я закончу \U0000231B\U000023F3')
         try:
-            stdin, stdout, stderr = ssh.exec_command('')
+            stdin, stdout, stderr = ssh.exec_command('cd /var/www/kvik_dev_test/kvik_test\necho 2262 | sudo -S git pull --ff-only\ndocker build -t kvik_dev_test .\ndocker-compose up -d\necho y | docker image prune -a')
             opt = stdout.readlines()
             opt = "".join(opt)
             opt2 = stderr.readlines()
@@ -105,8 +105,7 @@ async def restart_kvik_next(message: types.Message):
             print(opt)
             print('---')
             print(opt2)
-            # await message.answer('Готово\U0001F978 вызови /status')
-            await message.answer('Эта команда пока не работает')
+            await message.answer('Готово\U0001F978 вызови /status')
 
         except Exception:
             await message.answer(
