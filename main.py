@@ -78,7 +78,7 @@ async def restart_kvik_next(message: types.Message):
         ssh.connect('192.168.8.111', username='vitaly', password='2262')
         await message.answer('Это минут на 10-15, тебе придет уведомление, как я закончу \U0000231B\U000023F3')
         try:
-            stdin, stdout, stderr = ssh.exec_command('cd /var/www/kvik.ru/\nrm -r -f kvik_destkop\ngit clone https://github.com/INDEX-GG/kvik_destkop.git\ncd kvik_destkop/\ndocker rm -f kvik_production\ndocker rmi kvik_production\ndocker build -t kvik_production .\ndocker-compose up -d\n')
+            stdin, stdout, stderr = ssh.exec_command('cd /var/www/kvik.ru/kvik_destkop\necho 2262 | sudo -S git pull --ff-only\ndocker build -t kvik_production .\ndocker-compose up -d\necho y | docker image prune -a')
             opt = stdout.readlines()
             opt = "".join(opt)
             await message.answer('Готово\U0001F917 вызови /status')
@@ -100,11 +100,6 @@ async def restart_kvik_next(message: types.Message):
             stdin, stdout, stderr = ssh.exec_command('cd /var/www/kvik_dev_test/kvik_test\necho 2262 | sudo -S git pull --ff-only\ndocker build -t kvik_dev_test .\ndocker-compose up -d\necho y | docker image prune -a')
             opt = stdout.readlines()
             opt = "".join(opt)
-            opt2 = stderr.readlines()
-            opt2 = "".join(opt2)
-            print(opt)
-            print('---')
-            print(opt2)
             await message.answer('Готово\U0001F978 вызови /status')
 
         except Exception:
