@@ -59,7 +59,7 @@ async def restart_cleex_back(message: types.Message):
         ssh.connect('192.168.8.111', username='vitaly', password='2262')
         await message.answer('Минуту терпения \U0000231B\U000023F3')
         try:
-            stdin, stdout, stderr = ssh.exec_command('cd /var/www/cleex.ru/backend/\ndocker rm -f cleex-back\ndocker rmi docker.pkg.github.com/index-gg/cleex_backend/cleex-back:develop\necho 2262 | sudo -S docker-compose up -d')
+            stdin, stdout, stderr = ssh.exec_command('cd /var/www/cleex.ru/backend/\necho 2262 | sudo -S docker rm -f cleex-back\necho 2262 | sudo -S docker rmi docker.pkg.github.com/index-gg/cleex_backend/cleex-back:develop\necho 2262 | sudo -S docker-compose up -d')
             opt = stdout.readlines()
             opt = "".join(opt)
             await message.answer('Готово\U0001F37E вызови /status')
@@ -78,9 +78,20 @@ async def restart_kvik_next(message: types.Message):
         ssh.connect('192.168.8.111', username='vitaly', password='2262')
         await message.answer('Это минут на 10-15, тебе придет уведомление, как я закончу \U0000231B\U000023F3')
         try:
-            stdin, stdout, stderr = ssh.exec_command('cd /var/www/kvik.ru/kvik_destkop\necho 2262 | sudo -S git pull --ff-only\ndocker build -t kvik_production .\ndocker-compose up -d\necho y | docker image prune -a')
+            stdin, stdout, stderr = ssh.exec_command('cd /var/www/kvik.ru/kvik_destkop\necho 2262 | sudo -S git pull https://github.com/INDEX-GG/kvik_destkop.git production\necho 2262 | sudo -S docker build -t kvik_production .\necho 2262 | sudo -S docker-compose up -d\necho y | docker image prune -a')
+
+
+
+
+
+
             opt = stdout.readlines()
             opt = "".join(opt)
+            opt2 = stderr.readlines()
+            opt2 = "".join(opt2)
+            print(opt)
+            print('----------')
+            print(opt2)
             await message.answer('Готово\U0001F917 вызови /status')
         except Exception:
             await message.answer(
@@ -97,7 +108,7 @@ async def restart_kvik_next(message: types.Message):
         ssh.connect('192.168.8.111', username='vitaly', password='2262')
         await message.answer('Придется немного подождать, тебе придет уведомление, как я закончу \U0000231B\U000023F3')
         try:
-            stdin, stdout, stderr = ssh.exec_command('cd /var/www/kvik_dev_test/kvik_test\necho 2262 | sudo -S git pull --ff-only\ndocker build -t kvik_dev_test .\ndocker-compose up -d\necho y | docker image prune -a')
+            stdin, stdout, stderr = ssh.exec_command('cd /var/www/kvik_dev_test/kvik_test\necho 2262 | sudo -S git pull --ff-only\necho 2262 | sudo -S docker build -t kvik_dev_test .\necho 2262 | sudo -S docker-compose up -d\necho y | docker image prune -a')
             opt = stdout.readlines()
             opt = "".join(opt)
             await message.answer('Готово\U0001F978 вызови /status')
@@ -204,7 +215,7 @@ async def status(message: types.Message):
     len4 = 13
     len5 = 15
     len6 = 11
-    await message.answer('\U000026AA Workdirect' + ' ' * len1 + status1 + '\n\U000026AA Cleex (back)' + ' ' * len2 + status2 + '\n\U000026AA Cleex (image)' + ' ' * len3 + status3 + '\n\U000026AA Kvik (prod)' + ' ' * len4 + status4 + '\n\U000026AA Kvik (dev)' + ' ' * len5 + status5 + '\n\U000026AA Kvik (image)' + ' ' * len6 + status6 + '\n/restart для перезапуска')
+    await message.answer('\U000026AA Workdirect' + ' ' * len1 + status1 + '\n\U000026AA Cleex (back)' + ' ' * len2 + status2 + '\n\U000026AA Cleex (image)' + ' ' * len3 + status3 + '\n\U000026AA Kvik (prod)' + ' ' * len4 + status4 + '\n\U000026AA Kvik (dev)' + ' ' * len5 + status5 + '\n\U000026AA Kvik (image)' + ' ' * len6 + status6 + '\n\n/restart для перезапуска')
 
 
 async def listen():
