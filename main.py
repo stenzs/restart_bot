@@ -43,10 +43,23 @@ async def restart_workdirect(message: types.Message):
             stdin, stdout, stderr = ssh.exec_command('rm -r -f /var/www/workdirect.ru/\ncd /var/www/\ngit clone https://github.com/INDEX-GG/WorkDirect.git\ncd WorkDirect/\nmv project-root/ /var/www/\nrm -r -f /var/www/WorkDirect/\ncd /var/www/\nmv project-root/ workdirect.ru\ncd /var/www/\nchmod -R 777 workdirect.ru\ncd /var/www/workdirect.ru/\ncomposer update\ny')
             opt = stdout.readlines()
             opt = "".join(opt)
+            opt2 = stderr.readlines()
+            opt2 = "".join(opt2)
+            if len(opt.strip()) != 0:
+                if len(opt) > 4000:
+                    for x in range(0, len(opt), 4000):
+                        await message.answer(opt[x:x + 4096])
+                else:
+                    await message.answer(opt)
+            if len(opt2.strip()) != 0:
+                if len(opt2) > 4000:
+                    for z in range(0, len(opt2), 4000):
+                        await message.answer(opt2[z:z + 4000])
+                else:
+                    await message.answer(opt2)
             await message.answer('Готово\U0001F60E вызови /status')
         except Exception:
-            await message.answer(
-                'При выполнении команд по SSH что-то пошло не так \U0001F631\nНо срвер мог перезапуститься, проверь /status')
+            await message.answer('При выполнении команд по SSH что-то пошло не так \U0001F631\nНо срвер мог перезапуститься, проверь /status')
     except Exception:
         await message.answer('Не удалось подключиться к SSH \U0001F631')
 
@@ -62,6 +75,20 @@ async def restart_cleex_back(message: types.Message):
             stdin, stdout, stderr = ssh.exec_command('cd /var/www/cleex.ru/backend/\necho 2262 | sudo -S docker rm -f cleex-back\necho 2262 | sudo -S docker rmi docker.pkg.github.com/index-gg/cleex_backend/cleex-back:develop\necho 2262 | sudo -S docker-compose up -d')
             opt = stdout.readlines()
             opt = "".join(opt)
+            opt2 = stderr.readlines()
+            opt2 = "".join(opt2)
+            if len(opt.strip()) != 0:
+                if len(opt) > 4000:
+                    for x in range(0, len(opt), 4000):
+                        await message.answer(opt[x:x + 4096])
+                else:
+                    await message.answer(opt)
+            if len(opt2.strip()) != 0:
+                if len(opt2) > 4000:
+                    for z in range(0, len(opt2), 4000):
+                        await message.answer(opt2[z:z + 4000])
+                else:
+                    await message.answer(opt2)
             await message.answer('Готово\U0001F37E вызови /status')
         except Exception:
             await message.answer(
@@ -79,23 +106,25 @@ async def restart_kvik_next(message: types.Message):
         await message.answer('Это минут на 10-15, тебе придет уведомление, как я закончу \U0000231B\U000023F3')
         try:
             stdin, stdout, stderr = ssh.exec_command('cd /var/www/kvik.ru/kvik_destkop\necho 2262 | sudo -S git pull https://github.com/INDEX-GG/kvik_destkop.git production\necho 2262 | sudo -S docker build -t kvik_production .\necho 2262 | sudo -S docker-compose up -d\necho y | docker image prune -a')
-
-
-
-
-
-
             opt = stdout.readlines()
             opt = "".join(opt)
             opt2 = stderr.readlines()
             opt2 = "".join(opt2)
-            print(opt)
-            print('----------')
-            print(opt2)
+            if len(opt.strip()) != 0:
+                if len(opt) > 4000:
+                    for x in range(0, len(opt), 4000):
+                        await message.answer(opt[x:x + 4096])
+                else:
+                    await message.answer(opt)
+            if len(opt2.strip()) != 0:
+                if len(opt2) > 4000:
+                    for z in range(0, len(opt2), 4000):
+                        await message.answer(opt2[z:z + 4000])
+                else:
+                    await message.answer(opt2)
             await message.answer('Готово\U0001F917 вызови /status')
         except Exception:
-            await message.answer(
-                'При выполнении команд по SSH что-то пошло не так \U0001F631\nНо срвер мог перезапуститься, проверь /status')
+            await message.answer('При выполнении команд по SSH что-то пошло не так \U0001F631\nНо срвер мог перезапуститься, проверь /status')
     except Exception:
         await message.answer('Не удалось подключиться к SSH \U0001F631')
 
@@ -111,9 +140,23 @@ async def restart_kvik_next(message: types.Message):
             stdin, stdout, stderr = ssh.exec_command('cd /var/www/kvik_dev_test/kvik_test\necho 2262 | sudo -S git pull --ff-only\necho 2262 | sudo -S docker build -t kvik_dev_test .\necho 2262 | sudo -S docker-compose up -d\necho y | docker image prune -a')
             opt = stdout.readlines()
             opt = "".join(opt)
+            opt2 = stderr.readlines()
+            opt2 = "".join(opt2)
+            if len(opt.strip()) != 0:
+                if len(opt) > 4000:
+                    for x in range(0, len(opt), 4000):
+                        await message.answer(opt[x:x + 4096])
+                else:
+                    await message.answer(opt)
+            if len(opt2.strip()) != 0:
+                if len(opt2) > 4000:
+                    for z in range(0, len(opt2), 4000):
+                        await message.answer(opt2[z:z + 4000])
+                else:
+                    await message.answer(opt2)
             await message.answer('Готово\U0001F978 вызови /status')
-
         except Exception:
+            print(Exception)
             await message.answer(
                 'При выполнении команд по SSH что-то пошло не так \U0001F631\nНо срвер мог перезапуститься, проверь /status')
     except Exception:
@@ -131,6 +174,20 @@ async def restart_cleex_image(message: types.Message):
             stdin, stdout, stderr = ssh.exec_command('cd /var/www/cleex_image/\nkill -9 $(lsof -t -i:7050)\nkill -9 $(lsof -t -i:7051)\nuwsgi -M --socket 192.168.8.111:7050 --processes 4 --threads 2 --stats 192.168.8.111:7051 --protocol=http -w wsgi:app --daemonize /tmp/mylog.log')
             opt = stdout.readlines()
             opt = "".join(opt)
+            opt2 = stderr.readlines()
+            opt2 = "".join(opt2)
+            if len(opt.strip()) != 0:
+                if len(opt) > 4000:
+                    for x in range(0, len(opt), 4000):
+                        await message.answer(opt[x:x + 4096])
+                else:
+                    await message.answer(opt)
+            if len(opt2.strip()) != 0:
+                if len(opt2) > 4000:
+                    for z in range(0, len(opt2), 4000):
+                        await message.answer(opt2[z:z + 4000])
+                else:
+                    await message.answer(opt2)
             await message.answer('Готово\U0001F44D вызови /status')
         except Exception:
             await message.answer('При выполнении команд по SSH что-то пошло не так \U0001F631\nНо срвер мог перезапуститься, проверь /status')
@@ -149,6 +206,20 @@ async def restart_kvik_image(message: types.Message):
             stdin, stdout, stderr = ssh.exec_command('cd /var/www/kvik_image/\nkill -9 $(lsof -t -i:6001)\nkill -9 $(lsof -t -i:7001)\nuwsgi -M --socket 192.168.8.111:6001 --processes 4 --threads 2 --stats 192.168.8.111:7001 --protocol=http -w wsgi:app --daemonize /tmp/mylog.log')
             opt = stdout.readlines()
             opt = "".join(opt)
+            opt2 = stderr.readlines()
+            opt2 = "".join(opt2)
+            if len(opt.strip()) != 0:
+                if len(opt) > 4000:
+                    for x in range(0, len(opt), 4000):
+                        await message.answer(opt[x:x + 4096])
+                else:
+                    await message.answer(opt)
+            if len(opt2.strip()) != 0:
+                if len(opt2) > 4000:
+                    for z in range(0, len(opt2), 4000):
+                        await message.answer(opt2[z:z + 4000])
+                else:
+                    await message.answer(opt2)
             await message.answer('Готово\U0001F973 вызови /status')
         except Exception:
             await message.answer('При выполнении команд по SSH что-то пошло не так \U0001F631\nНо срвер мог перезапуститься, проверь /status')
