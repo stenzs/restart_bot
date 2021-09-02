@@ -32,6 +32,38 @@ async def restart(message: types.Message):
     await message.reply("Что будем перезагружать?", reply_markup=kb.markup)
 
 
+@dp.message_handler(commands=['re_Kvik_chat'])
+async def restart_kvik_chat(message: types.Message):
+    ssh = paramiko.SSHClient()
+    ssh.set_missing_host_key_policy(paramiko.AutoAddPolicy())
+    try:
+        ssh.connect('192.168.8.111', username='vitaly', password='2262')
+        await message.answer('Это ненадолго \U0000231B\U000023F3')
+        try:
+            stdin, stdout, stderr = ssh.exec_command('cd /var/www/kvik_chat/\necho 2262 | sudo -S git pull https://github.com/stenzs/kvik_chat.git\ncd kvik_chat/\nuwsgi --http :6066 --gevent 1000 --http-websockets --master --wsgi-file main.py --callable app --daemonize /tmp/mylog.log')
+            opt = stdout.readlines()
+            opt = "".join(opt)
+            opt2 = stderr.readlines()
+            opt2 = "".join(opt2)
+            if len(opt.strip()) != 0:
+                if len(opt) > 4000:
+                    for x in range(0, len(opt), 4000):
+                        await message.answer(opt[x:x + 4096])
+                else:
+                    await message.answer(opt)
+            if len(opt2.strip()) != 0:
+                if len(opt2) > 4000:
+                    for z in range(0, len(opt2), 4000):
+                        await message.answer(opt2[z:z + 4000])
+                else:
+                    await message.answer(opt2)
+            await message.answer('Готово\U0001F921 вызови /status')
+        except Exception:
+            await message.answer('При выполнении команд по SSH что-то пошло не так \U0001F631\nНо срвер мог перезапуститься, проверь /status')
+    except Exception:
+        await message.answer('Не удалось подключиться к SSH \U0001F631')
+
+
 @dp.message_handler(commands=['re_Workdirect'])
 async def restart_workdirect(message: types.Message):
     ssh = paramiko.SSHClient()
@@ -279,6 +311,14 @@ async def status(message: types.Message):
             status6 = '\U00002714\U00002714\U00002714'
     except Exception:
         status6 = '\U0001F4A4\U0001F4A4\U0001F4A4'
+    try:
+        response7 = requests.get("http://192.168.8.111:6066")
+        if response7.status_code != 200:
+            status7 = '\U0001F4A4\U0001F4A4\U0001F4A4'
+        else:
+            status7 = '\U00002714\U00002714\U00002714'
+    except Exception:
+        status7 = '\U0001F4A4\U0001F4A4\U0001F4A4'
 
     len1 = 13
     len2 = 10
@@ -286,7 +326,8 @@ async def status(message: types.Message):
     len4 = 13
     len5 = 15
     len6 = 11
-    await message.answer('\U000026AA Workdirect' + ' ' * len1 + status1 + '\n\U000026AA Cleex (back)' + ' ' * len2 + status2 + '\n\U000026AA Cleex (image)' + ' ' * len3 + status3 + '\n\U000026AA Kvik (prod)' + ' ' * len4 + status4 + '\n\U000026AA Kvik (dev)' + ' ' * len5 + status5 + '\n\U000026AA Kvik (image)' + ' ' * len6 + status6 + '\n\n/restart для перезапуска')
+    len7 = 12
+    await message.answer('\U000026AA Workdirect' + ' ' * len1 + status1 + '\n\U000026AA Cleex (back)' + ' ' * len2 + status2 + '\n\U000026AA Cleex (image)' + ' ' * len3 + status3 + '\n\U000026AA Kvik (prod)' + ' ' * len4 + status4 + '\n\U000026AA Kvik (dev)' + ' ' * len5 + status5 + '\n\U000026AA Kvik (image)' + ' ' * len6 + status6 + '\n\U000026AA Kvik (chat)' + ' ' * len7 + status7 + '\n\n/restart для перезапуска')
 
 
 async def listen():
@@ -345,6 +386,15 @@ async def listen():
     except Exception:
         status6 = 'false'
     stack.append(status6)
+    try:
+        response7 = requests.get("http://192.168.8.111:6066")
+        if response7.status_code != 200:
+            status7 = 'false'
+        else:
+            status7 = 'true'
+    except Exception:
+        status7 = 'false'
+    stack.append(status7)
     if 'false' in stack:
         users_selected = (Users.select()).dicts().execute()
         for user in users_selected:
