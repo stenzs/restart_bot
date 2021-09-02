@@ -40,7 +40,7 @@ async def restart_kvik_chat(message: types.Message):
         ssh.connect('192.168.8.111', username='vitaly', password='2262')
         await message.answer('Это ненадолго \U0000231B\U000023F3')
         try:
-            stdin, stdout, stderr = ssh.exec_command('cd /var/www/kvik_chat/\necho 2262 | sudo -S git pull https://github.com/stenzs/kvik_chat.git\ncd kvik_chat/\nuwsgi --http :6066 --gevent 1000 --http-websockets --master --wsgi-file main.py --callable app --daemonize /tmp/mylog.log')
+            stdin, stdout, stderr = ssh.exec_command('cd /var/www/kvik_chat/\nkill -9 $(lsof -t -i:6066)\necho 2262 | sudo -S git pull https://github.com/stenzs/kvik_chat.git\nuwsgi --http :6066 --gevent 1000 --http-websockets --master --wsgi-file main.py --callable app --daemonize /tmp/mylog.log')
             opt = stdout.readlines()
             opt = "".join(opt)
             opt2 = stderr.readlines()
@@ -326,7 +326,7 @@ async def status(message: types.Message):
     len4 = 13
     len5 = 15
     len6 = 11
-    len7 = 12
+    len7 = 14
     await message.answer('\U000026AA Workdirect' + ' ' * len1 + status1 + '\n\U000026AA Cleex (back)' + ' ' * len2 + status2 + '\n\U000026AA Cleex (image)' + ' ' * len3 + status3 + '\n\U000026AA Kvik (prod)' + ' ' * len4 + status4 + '\n\U000026AA Kvik (dev)' + ' ' * len5 + status5 + '\n\U000026AA Kvik (image)' + ' ' * len6 + status6 + '\n\U000026AA Kvik (chat)' + ' ' * len7 + status7 + '\n\n/restart для перезапуска')
 
 
