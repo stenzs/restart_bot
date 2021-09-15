@@ -104,7 +104,8 @@ async def restart_cleex_back(message: types.Message):
         ssh.connect('192.168.8.111', username='vitaly', password='2262')
         await message.answer('Минуту терпения \U0000231B\U000023F3')
         try:
-            stdin, stdout, stderr = ssh.exec_command('cd /var/www/cleex.ru/backend/\necho 2262 | sudo -S docker rm -f cleex-back\necho 2262 | sudo -S docker rmi docker.pkg.github.com/index-gg/cleex_backend/cleex-back:develop\necho 2262 | sudo -S docker-compose up -d')
+            # stdin, stdout, stderr = ssh.exec_command('cd /var/www/cleex.ru/backend/\necho 2262 | sudo -S docker rm -f cleex-back\necho 2262 | sudo -S docker rmi -f docker.pkg.github.com/index-gg/cleex_backend/cleex-back:develop\necho 2262 | sudo -S docker-compose up -d')
+            stdin, stdout, stderr = ssh.exec_command('cd /var/www/cleex.ru/CLEEX_back\necho 2262 | sudo -S git pull --ff-only\necho 2262 | sudo -S docker build -t cleex_back .\necho 2262 | sudo -S docker-compose up -d\necho y | docker image prune -a')
             opt = stdout.readlines()
             opt = "".join(opt)
             opt2 = stderr.readlines()
