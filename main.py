@@ -381,7 +381,7 @@ async def status(message: types.Message):
     len5 = 15
     len6 = 11
     len7 = 14
-    len8 = 14
+    len8 = 11
     await message.answer('\U000026AA Workdirect' + ' ' * len1 + status1 + '\n\U000026AA Cleex (back)' + ' ' * len2 + status2 + '\n\U000026AA Cleex (image)' + ' ' * len3 + status3 + '\n\U000026AA Kvik (prod)' + ' ' * len4 + status4 + '\n\U000026AA Kvik (dev)' + ' ' * len5 + status5 + '\n\U000026AA Kvik (image)' + ' ' * len6 + status6 + '\n\U000026AA Kvik (chat)' + ' ' * len7 + status7 + '\n\U000026AA Redis cache' + ' ' * len8 + status8 + '\n\n/restart для перезапуска')
 
 
