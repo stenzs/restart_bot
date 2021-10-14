@@ -130,6 +130,39 @@ async def restart_cleex_back(message: types.Message):
         await message.answer('Не удалось подключиться к SSH \U0001F631')
 
 
+@dp.message_handler(commands=['re_Kvik_search'])
+async def restart_Kvik_search(message: types.Message):
+    ssh = paramiko.SSHClient()
+    ssh.set_missing_host_key_policy(paramiko.AutoAddPolicy())
+    try:
+        ssh.connect('192.168.8.111', username='vitaly', password='2262')
+        await message.answer('Минуту терпения \U0000231B\U000023F3')
+        try:
+            stdin, stdout, stderr = ssh.exec_command('cd /var/www/kvik_search_engine\necho 2262 | sudo -S git pull --ff-only\necho 2262 | sudo -S docker build -t kvik_search .\necho 2262 | sudo -S docker-compose up -d\necho y | docker image prune -a')
+            opt = stdout.readlines()
+            opt = "".join(opt)
+            opt2 = stderr.readlines()
+            opt2 = "".join(opt2)
+            if len(opt.strip()) != 0:
+                if len(opt) > 4000:
+                    for x in range(0, len(opt), 4000):
+                        await message.answer(opt[x:x + 4096])
+                else:
+                    await message.answer(opt)
+            if len(opt2.strip()) != 0:
+                if len(opt2) > 4000:
+                    for z in range(0, len(opt2), 4000):
+                        await message.answer(opt2[z:z + 4000])
+                else:
+                    await message.answer(opt2)
+            await message.answer('Готово\U0001F37E вызови /status')
+        except Exception:
+            await message.answer(
+                'При выполнении команд по SSH что-то пошло не так \U0001F631\nНо срвер мог перезапуститься, проверь /status')
+    except Exception:
+        await message.answer('Не удалось подключиться к SSH \U0001F631')
+
+
 @dp.message_handler(commands=['re_Kvik_prod'])
 async def restart_kvik_next(message: types.Message):
     ssh = paramiko.SSHClient()
@@ -302,6 +335,7 @@ async def get_ports(message: types.Message):
                          '\n\U000026AA Kvik (dev)  --  4000' +
                          '\n\U000026AA Kvik (image)  --  6001' +
                          '\n\U000026AA Kvik (chat)  --  6066' +
+                         '\n\U000026AA Kvik (search hints)  --  6555' +
                          '\n\U000026AA Redis cache  --  6550'
                          )
 
@@ -374,6 +408,17 @@ async def status(message: types.Message):
             status8 = '\U00002714\U00002714\U00002714'
     except Exception:
         status8 = '\U0001F4A4\U0001F4A4\U0001F4A4'
+
+
+
+    try:
+        response9 = requests.get("http://192.168.8.111:6555")
+        if response9.status_code != 200:
+            status9 = '\U0001F4A4\U0001F4A4\U0001F4A4'
+        else:
+            status9 = '\U00002714\U00002714\U00002714'
+    except Exception:
+        status9 = '\U0001F4A4\U0001F4A4\U0001F4A4'
     len1 = 13
     len2 = 10
     len3 = 8
@@ -382,7 +427,8 @@ async def status(message: types.Message):
     len6 = 11
     len7 = 14
     len8 = 11
-    await message.answer('\U000026AA Workdirect' + ' ' * len1 + status1 + '\n\U000026AA Cleex (back)' + ' ' * len2 + status2 + '\n\U000026AA Cleex (image)' + ' ' * len3 + status3 + '\n\U000026AA Kvik (prod)' + ' ' * len4 + status4 + '\n\U000026AA Kvik (dev)' + ' ' * len5 + status5 + '\n\U000026AA Kvik (image)' + ' ' * len6 + status6 + '\n\U000026AA Kvik (chat)' + ' ' * len7 + status7 + '\n\U000026AA Redis cache' + ' ' * len8 + status8 + '\n\n/restart для перезапуска')
+    len9 = 9
+    await message.answer('\U000026AA Workdirect' + ' ' * len1 + status1 + '\n\U000026AA Cleex (back)' + ' ' * len2 + status2 + '\n\U000026AA Cleex (image)' + ' ' * len3 + status3 + '\n\U000026AA Kvik (prod)' + ' ' * len4 + status4 + '\n\U000026AA Kvik (dev)' + ' ' * len5 + status5 + '\n\U000026AA Kvik (image)' + ' ' * len6 + status6 + '\n\U000026AA Kvik (chat)' + ' ' * len7 + status7 + '\n\U000026AA Redis cache' + ' ' * len8 + status8 + '\n\U000026AA Kvik (search)' + ' ' * len9 + status9 + '\n\n/restart для перезапуска')
 
 
 async def listen():
@@ -459,6 +505,15 @@ async def listen():
     except Exception:
         status8 = 'false'
     stack.append(status8)
+    try:
+        response9 = requests.get("http://192.168.8.111:6555")
+        if response9.status_code != 200:
+            status9 = 'false'
+        else:
+            status9 = 'true'
+    except Exception:
+        status9 = 'false'
+    stack.append(status9)
     if 'false' in stack:
         users_selected = (Users.select()).dicts().execute()
         for user in users_selected:
