@@ -13,7 +13,7 @@ DELAY = 1800
 
 bot = Bot(token=config.TOKEN)
 dp = Dispatcher(bot)
-server_port = '192.168.8.111'
+server_host = '192.168.8.111'
 
 @dp.message_handler(commands=['start'])
 async def start(message: types.Message):
@@ -37,7 +37,7 @@ async def restart_kvik_chat(message: types.Message):
     ssh = paramiko.SSHClient()
     ssh.set_missing_host_key_policy(paramiko.AutoAddPolicy())
     try:
-        ssh.connect(server_port, username='vitaly', password='2262')
+        ssh.connect(server_host, username='vitaly', password='2262')
         await message.answer('Это ненадолго \U0000231B\U000023F3')
         try:
             stdin, stdout, stderr = ssh.exec_command('cd /var/www/kvik_chat/\nkill -9 $(lsof -t -i:6066)\necho 2262 | sudo -S git pull https://github.com/stenzs/kvik_chat.git\nuwsgi --http :6066 --gevent 1000 --http-websockets --master --wsgi-file main.py --callable app --daemonize /tmp/mylog.log')
@@ -69,7 +69,7 @@ async def restart_workdirect(message: types.Message):
     ssh = paramiko.SSHClient()
     ssh.set_missing_host_key_policy(paramiko.AutoAddPolicy())
     try:
-        ssh.connect(server_port, username='vitaly', password='2262')
+        ssh.connect(server_host, username='vitaly', password='2262')
         await message.answer('Минуту терпения \U0000231B\U000023F3')
         try:
             stdin, stdout, stderr = ssh.exec_command('rm -r -f /var/www/workdirect.ru/\ncd /var/www/\ngit clone https://github.com/INDEX-GG/WorkDirect.git\ncd WorkDirect/\nmv project-root/ /var/www/\nrm -r -f /var/www/WorkDirect/\ncd /var/www/\nmv project-root/ workdirect.ru\ncd /var/www/\nchmod -R 777 workdirect.ru\ncd /var/www/workdirect.ru/\ncomposer update\ny')
@@ -101,7 +101,7 @@ async def restart_cleex_back(message: types.Message):
     ssh = paramiko.SSHClient()
     ssh.set_missing_host_key_policy(paramiko.AutoAddPolicy())
     try:
-        ssh.connect(server_port, username='vitaly', password='2262')
+        ssh.connect(server_host, username='vitaly', password='2262')
         await message.answer('Минуту терпения \U0000231B\U000023F3')
         try:
             # stdin, stdout, stderr = ssh.exec_command('cd /var/www/cleex.ru/backend/\necho 2262 | sudo -S docker rm -f cleex-back\necho 2262 | sudo -S docker rmi -f docker.pkg.github.com/index-gg/cleex_backend/cleex-back:develop\necho 2262 | sudo -S docker-compose up -d')
@@ -135,7 +135,7 @@ async def restart_Kvik_search(message: types.Message):
     ssh = paramiko.SSHClient()
     ssh.set_missing_host_key_policy(paramiko.AutoAddPolicy())
     try:
-        ssh.connect(server_port, username='vitaly', password='2262')
+        ssh.connect(server_host, username='vitaly', password='2262')
         await message.answer('Минуту терпения \U0000231B\U000023F3')
         try:
             stdin, stdout, stderr = ssh.exec_command('cd /var/www/kvik_search_engine\necho 2262 | sudo -S git pull --ff-only\necho 2262 | sudo -S docker build -t kvik_search .\necho 2262 | sudo -S docker-compose up -d\necho y | docker image prune -a')
@@ -168,7 +168,7 @@ async def restart_kvik_next(message: types.Message):
     ssh = paramiko.SSHClient()
     ssh.set_missing_host_key_policy(paramiko.AutoAddPolicy())
     try:
-        ssh.connect(server_port, username='vitaly', password='2262')
+        ssh.connect(server_host, username='vitaly', password='2262')
         await message.answer('Это минут на 10-15, тебе придет уведомление, как я закончу \U0000231B\U000023F3')
         try:
             stdin, stdout, stderr = ssh.exec_command('cd /var/www/kvik.ru/kvik_destkop\necho 2262 | sudo -S git pull https://github.com/INDEX-GG/kvik_destkop.git production\necho 2262 | sudo -S docker build -t kvik_production .\necho 2262 | sudo -S docker-compose up -d\necho y | docker image prune -a')
@@ -200,7 +200,7 @@ async def restart_kvik_next(message: types.Message):
     ssh = paramiko.SSHClient()
     ssh.set_missing_host_key_policy(paramiko.AutoAddPolicy())
     try:
-        ssh.connect(server_port, username='vitaly', password='2262')
+        ssh.connect(server_host, username='vitaly', password='2262')
         await message.answer('Придется немного подождать, тебе придет уведомление, как я закончу \U0000231B\U000023F3')
         try:
             stdin, stdout, stderr = ssh.exec_command('cd /var/www/kvik_dev_test/kvik_test\necho 2262 | sudo -S git pull --ff-only\necho 2262 | sudo -S docker build -t kvik_dev_test .\necho 2262 | sudo -S docker-compose up -d\necho y | docker image prune -a')
@@ -234,10 +234,10 @@ async def restart_cleex_image(message: types.Message):
     ssh = paramiko.SSHClient()
     ssh.set_missing_host_key_policy(paramiko.AutoAddPolicy())
     try:
-        ssh.connect(server_port, username='vitaly', password='2262')
+        ssh.connect(server_host, username='vitaly', password='2262')
         await message.answer('1...2...3... \U0001F406')
         try:
-            stdin, stdout, stderr = ssh.exec_command('cd /var/www/cleex_image/\nkill -9 $(lsof -t -i:7050)\nkill -9 $(lsof -t -i:7051)\nuwsgi -M --socket ' + str(server_port) + ':7050 --processes 4 --threads 2 --stats ' + str(server_port) + ':7051 --protocol=http -w wsgi:app --daemonize /tmp/mylog.log')
+            stdin, stdout, stderr = ssh.exec_command('cd /var/www/cleex_image/\nkill -9 $(lsof -t -i:7050)\nkill -9 $(lsof -t -i:7051)\nuwsgi -M --socket ' + str(server_host) + ':7050 --processes 4 --threads 2 --stats ' + str(server_host) + ':7051 --protocol=http -w wsgi:app --daemonize /tmp/mylog.log')
             opt = stdout.readlines()
             opt = "".join(opt)
             opt2 = stderr.readlines()
@@ -267,9 +267,9 @@ async def restart_kvik_image(message: types.Message):
     ssh.set_missing_host_key_policy(paramiko.AutoAddPolicy())
     await message.answer('1...2...3... \U0001F406')
     try:
-        ssh.connect(server_port, username='vitaly', password='2262')
+        ssh.connect(server_host, username='vitaly', password='2262')
         try:
-            stdin, stdout, stderr = ssh.exec_command('cd /var/www/kvik_image/\nkill -9 $(lsof -t -i:6001)\nkill -9 $(lsof -t -i:7001)\nuwsgi -M --socket ' + str(server_port) + ':6001 --processes 4 --threads 2 --stats ' + str(server_port) + ':7001 --protocol=http -w wsgi:app --daemonize /tmp/mylog.log')
+            stdin, stdout, stderr = ssh.exec_command('cd /var/www/kvik_image/\nkill -9 $(lsof -t -i:6001)\nkill -9 $(lsof -t -i:7001)\nuwsgi -M --socket ' + str(server_host) + ':6001 --processes 4 --threads 2 --stats ' + str(server_host) + ':7001 --protocol=http -w wsgi:app --daemonize /tmp/mylog.log')
             opt = stdout.readlines()
             opt = "".join(opt)
             opt2 = stderr.readlines()
@@ -299,9 +299,9 @@ async def restart_kvik_image(message: types.Message):
     ssh.set_missing_host_key_policy(paramiko.AutoAddPolicy())
     await message.answer('1...2...3... \U0001F406')
     try:
-        ssh.connect(server_port, username='vitaly', password='2262')
+        ssh.connect(server_host, username='vitaly', password='2262')
         try:
-            stdin, stdout, stderr = ssh.exec_command('cd /var/www/redis_cache/\nkill -9 $(lsof -t -i:6550)\nkill -9 $(lsof -t -i:7550)\nuwsgi -M --socket ' + str(server_port) + ':6550 --processes 4 --threads 2 --stats ' + str(server_port) + ':7550 --protocol=http -w wsgi:app --daemonize /tmp/mylog.log')
+            stdin, stdout, stderr = ssh.exec_command('cd /var/www/redis_cache/\nkill -9 $(lsof -t -i:6550)\nkill -9 $(lsof -t -i:7550)\nuwsgi -M --socket ' + str(server_host) + ':6550 --processes 4 --threads 2 --stats ' + str(server_host) + ':7550 --protocol=http -w wsgi:app --daemonize /tmp/mylog.log')
             opt = stdout.readlines()
             opt = "".join(opt)
             opt2 = stderr.readlines()
@@ -345,7 +345,7 @@ async def status(message: types.Message):
     if Users.get_or_none(number=message.from_user.id) is None:
         Users.create(number=message.from_user.id)
     try:
-        response1 = requests.get("http://" + str(server_port) + ":3070" )
+        response1 = requests.get("http://" + str(server_host) + ":3070")
         if response1.status_code != 200:
             status1 = '\U0001F4A4\U0001F4A4\U0001F4A4'
         else:
@@ -353,7 +353,7 @@ async def status(message: types.Message):
     except Exception:
         status1 = '\U0001F4A4\U0001F4A4\U0001F4A4'
     try:
-        response2 = requests.get("http://" + str(server_port) + ":6011")
+        response2 = requests.get("http://" + str(server_host) + ":6011")
         if response2.status_code != 200:
             status2 = '\U0001F4A4\U0001F4A4\U0001F4A4'
         else:
@@ -361,7 +361,7 @@ async def status(message: types.Message):
     except Exception:
         status2 = '\U0001F4A4\U0001F4A4\U0001F4A4'
     try:
-        response3 = requests.get("http://" + str(server_port) + ":7050")
+        response3 = requests.get("http://" + str(server_host) + ":7050")
         if response3.status_code != 200:
             status3 = '\U0001F4A4\U0001F4A4\U0001F4A4'
         else:
@@ -369,7 +369,7 @@ async def status(message: types.Message):
     except Exception:
         status3 = '\U0001F4A4\U0001F4A4\U0001F4A4'
     try:
-        response4 = requests.get("http://" + str(server_port) + ":3000")
+        response4 = requests.get("http://" + str(server_host) + ":3000")
         if response4.status_code != 200:
             status4 = '\U0001F4A4\U0001F4A4\U0001F4A4'
         else:
@@ -377,7 +377,7 @@ async def status(message: types.Message):
     except Exception:
         status4 = '\U0001F4A4\U0001F4A4\U0001F4A4'
     try:
-        response5 = requests.get("http://" + str(server_port) + ":4000")
+        response5 = requests.get("http://" + str(server_host) + ":4000")
         if response5.status_code != 200:
             status5 = '\U0001F4A4\U0001F4A4\U0001F4A4'
         else:
@@ -385,7 +385,7 @@ async def status(message: types.Message):
     except Exception:
         status5 = '\U0001F4A4\U0001F4A4\U0001F4A4'
     try:
-        response6 = requests.get("http://" + str(server_port) + ":6001")
+        response6 = requests.get("http://" + str(server_host) + ":6001")
         if response6.status_code != 200:
             status6 = '\U0001F4A4\U0001F4A4\U0001F4A4'
         else:
@@ -393,7 +393,7 @@ async def status(message: types.Message):
     except Exception:
         status6 = '\U0001F4A4\U0001F4A4\U0001F4A4'
     try:
-        response7 = requests.get("http://" + str(server_port) + ":6066")
+        response7 = requests.get("http://" + str(server_host) + ":6066")
         if response7.status_code != 200:
             status7 = '\U0001F4A4\U0001F4A4\U0001F4A4'
         else:
@@ -401,7 +401,7 @@ async def status(message: types.Message):
     except Exception:
         status7 = '\U0001F4A4\U0001F4A4\U0001F4A4'
     try:
-        response8 = requests.get("http://" + str(server_port) + ":6550")
+        response8 = requests.get("http://" + str(server_host) + ":6550")
         if response8.status_code != 200:
             status8 = '\U0001F4A4\U0001F4A4\U0001F4A4'
         else:
@@ -412,7 +412,7 @@ async def status(message: types.Message):
 
 
     try:
-        response9 = requests.get("http://" + str(server_port) + ":6555")
+        response9 = requests.get("http://" + str(server_host) + ":6555")
         if response9.status_code != 200:
             status9 = '\U0001F4A4\U0001F4A4\U0001F4A4'
         else:
@@ -434,7 +434,7 @@ async def status(message: types.Message):
 async def listen():
     stack = []
     try:
-        response1 = requests.get("http://" + str(server_port) + ":3070")
+        response1 = requests.get("http://" + str(server_host) + ":3070")
         if response1.status_code != 200:
             status1 = 'false'
         else:
@@ -443,7 +443,7 @@ async def listen():
         status1 = 'false'
     stack.append(status1)
     try:
-        response2 = requests.get("http://" + str(server_port) + ":6011")
+        response2 = requests.get("http://" + str(server_host) + ":6011")
         if response2.status_code != 200:
             status2 = 'false'
         else:
@@ -452,7 +452,7 @@ async def listen():
         status2 = 'false'
     stack.append(status2)
     try:
-        response3 = requests.get("http://" + str(server_port) + ":7050")
+        response3 = requests.get("http://" + str(server_host) + ":7050")
         if response3.status_code != 200:
             status3 = 'false'
         else:
@@ -461,7 +461,7 @@ async def listen():
         status3 = 'false'
     stack.append(status3)
     try:
-        response4 = requests.get("http://" + str(server_port) + ":3000")
+        response4 = requests.get("http://" + str(server_host) + ":3000")
         if response4.status_code != 200:
             status4 = 'false'
         else:
@@ -470,7 +470,7 @@ async def listen():
         status4 = 'false'
     stack.append(status4)
     try:
-        response5 = requests.get("http://" + str(server_port) + ":4000")
+        response5 = requests.get("http://" + str(server_host) + ":4000")
         if response5.status_code != 200:
             status5 = 'false'
         else:
@@ -479,7 +479,7 @@ async def listen():
         status5 = 'false'
     stack.append(status5)
     try:
-        response6 = requests.get("http://" + str(server_port) + ":6001")
+        response6 = requests.get("http://" + str(server_host) + ":6001")
         if response6.status_code != 200:
             status6 = 'false'
         else:
@@ -488,7 +488,7 @@ async def listen():
         status6 = 'false'
     stack.append(status6)
     try:
-        response7 = requests.get("http://" + str(server_port) + ":6066")
+        response7 = requests.get("http://" + str(server_host) + ":6066")
         if response7.status_code != 200:
             status7 = 'false'
         else:
@@ -497,7 +497,7 @@ async def listen():
         status7 = 'false'
     stack.append(status7)
     try:
-        response8 = requests.get("http://" + str(server_port) + ":6550")
+        response8 = requests.get("http://" + str(server_host) + ":6550")
         if response8.status_code != 200:
             status8 = 'false'
         else:
@@ -506,7 +506,7 @@ async def listen():
         status8 = 'false'
     stack.append(status8)
     try:
-        response9 = requests.get("http://" + str(server_port) + ":6555")
+        response9 = requests.get("http://" + str(server_host) + ":6555")
         if response9.status_code != 200:
             status9 = 'false'
         else:
