@@ -13,7 +13,7 @@ DELAY = 1800
 
 bot = Bot(token=config.TOKEN)
 dp = Dispatcher(bot)
-server_host = '192.168.8.111'
+server_host = '192.168.145.195'
 
 @dp.message_handler(commands=['start'])
 async def start(message: types.Message):
@@ -171,7 +171,7 @@ async def restart_kvik_next(message: types.Message):
         ssh.connect(server_host, username='vitaly', password='2262')
         await message.answer('Это минут на 10-15, тебе придет уведомление, как я закончу \U0000231B\U000023F3')
         try:
-            stdin, stdout, stderr = ssh.exec_command('cd /var/www/kvik.ru/kvik_destkop\necho 2262 | sudo -S git pull https://github.com/INDEX-GG/kvik_destkop.git production\necho 2262 | sudo -S docker build -t kvik_production .\necho 2262 | sudo -S docker-compose up -d\necho y | docker image prune -a')
+            stdin, stdout, stderr = ssh.exec_command('cd /var/www/kvik.ru/kvik_destkop\necho 2262 | sudo -S git pull https://github.com/INDEX-GG/kvik_destkop.git production\necho 2262 | sudo -S docker build --no-cache -t kvik_production .\necho 2262 | sudo -S docker-compose up -d\necho y | docker image prune -a')
             opt = stdout.readlines()
             opt = "".join(opt)
             opt2 = stderr.readlines()
@@ -203,7 +203,7 @@ async def restart_kvik_next(message: types.Message):
         ssh.connect(server_host, username='vitaly', password='2262')
         await message.answer('Придется немного подождать, тебе придет уведомление, как я закончу \U0000231B\U000023F3')
         try:
-            stdin, stdout, stderr = ssh.exec_command('cd /var/www/kvik_dev_test/kvik_test\necho 2262 | sudo -S git pull --ff-only\necho 2262 | sudo -S docker build -t kvik_dev_test .\necho 2262 | sudo -S docker-compose up -d\necho y | docker image prune -a')
+            stdin, stdout, stderr = ssh.exec_command('cd /var/www/kvik_dev_test/kvik_test\necho 2262 | sudo -S git pull --ff-only\necho 2262 | sudo -S docker build --no-cache -t kvik_dev_test .\necho 2262 | sudo -S docker-compose up -d\necho y | docker image prune -a')
             opt = stdout.readlines()
             opt = "".join(opt)
             opt2 = stderr.readlines()
