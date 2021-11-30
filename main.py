@@ -15,12 +15,17 @@ bot = Bot(token=config.TOKEN)
 dp = Dispatcher(bot)
 server_host = '192.168.145.195'
 
+
 @dp.message_handler(commands=['start'])
 async def start(message: types.Message):
     if Users.get_or_none(number=message.from_user.id) is None:
-        Users.create(number=message.from_user.id)
-    await message.answer('Добро пожаловать\nИспользуйте подсказки по команде /help')
-
+        if int(message.from_user.id) not in config.users_security:
+            await message.answer('Вас нет в вайт-листе, передайде администратору свой идентификатор: ' + str(message.from_user.id))
+        else:
+            Users.create(number=message.from_user.id)
+            await message.answer('Добро пожаловать\nИспользуйте подсказки по команде /help')
+    else:
+        await message.answer('Используйте подсказки по команде /help')
 
 @dp.message_handler(commands=['help'])
 async def help(message: types.Message):
