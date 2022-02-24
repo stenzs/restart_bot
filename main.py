@@ -63,8 +63,7 @@ async def restart_kvik_chat(message: types.Message):
                                                          '2262 | sudo -S git pull '
                                                          'https://github.com/stenzs/kvik_chat.git\nuwsgi '
                                                          '--http :6066 --gevent 1000 --http-websockets --master '
-                                                         '--wsgi-file main.py --callable app '
-                                                         '--daemonize /tmp/mylog.log')
+                                                         '--wsgi-file main.py --callable app')
                 opt = stdout.readlines()
                 opt = "".join(opt)
                 opt2 = stderr.readlines()
@@ -314,7 +313,7 @@ async def restart_cleex_image(message: types.Message):
                                                          str(server_host) +
                                                          ':7050 --processes 4 --threads 2 --stats ' +
                                                          str(server_host) +
-                                                         ':7051 --protocol=http -w wsgi:app --daemonize /tmp/mylog.log')
+                                                         ':7051 --protocol=http -w wsgi:app')
                 opt = stdout.readlines()
                 opt = "".join(opt)
                 opt2 = stderr.readlines()
@@ -356,7 +355,7 @@ async def restart_kvik_image(message: types.Message):
                                                          str(server_host) +
                                                          ':6001 --processes 4 --threads 2 --stats ' +
                                                          str(server_host) +
-                                                         ':7001 --protocol=http -w wsgi:app --daemonize /tmp/mylog.log')
+                                                         ':7001 --protocol=http -w wsgi:app')
                 opt = stdout.readlines()
                 opt = "".join(opt)
                 opt2 = stderr.readlines()
@@ -398,7 +397,7 @@ async def restart_kvik_image(message: types.Message):
                                                          str(server_host) +
                                                          ':6550 --processes 4 --threads 2 --stats ' +
                                                          str(server_host) +
-                                                         ':7550 --protocol=http -w wsgi:app --daemonize /tmp/mylog.log')
+                                                         ':7550 --protocol=http -w wsgi:app')
                 opt = stdout.readlines()
                 opt = "".join(opt)
                 opt2 = stderr.readlines()
